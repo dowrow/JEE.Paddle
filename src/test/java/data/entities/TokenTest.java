@@ -3,8 +3,6 @@ package data.entities;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
-
 import org.junit.Test;
 
 import data.entities.Token;
@@ -24,9 +22,9 @@ public class TokenTest {
     	 User user = new User("u", "u@gmail.com", "p", Calendar.getInstance());
          Token token = new Token(user);
          assertEquals(token.hasExpired(), false);
-         Calendar twoHoursLater = new GregorianCalendar();
-         twoHoursLater.add(Calendar.HOUR_OF_DAY, 1);
-         token.setCreationTimestamp(twoHoursLater);
+         Calendar calendar = Calendar.getInstance();
+         calendar.add(Calendar.HOUR_OF_DAY, -2);
+         token.setCreationTimestamp(calendar);
          assertEquals(token.hasExpired(), true);
     }
 
