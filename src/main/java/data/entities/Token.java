@@ -18,12 +18,12 @@ public class Token {
 
     @Column(unique = true, nullable = false)
     private String value;
-
+    
     @ManyToOne
     @JoinColumn
     private User user;
 
-    public Token() {
+	public Token() {
     }
 
     public Token(User user) {
@@ -68,4 +68,13 @@ public class Token {
     public String toString() {
         return "Token [id=" + id + ", value=" + value + ", userId=" + user.getId() + "]";
     }
+
+	public boolean hasExpired() {
+			return false;	
+	}
+
+	public void setCreationTimestamp(java.util.Calendar creationTimestamp) {
+		// TODO Auto-generated method stub
+		
+	}
 }
