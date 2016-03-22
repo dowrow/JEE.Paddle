@@ -1,32 +1,26 @@
 # Tecnología Spring: Proyecto Padel
-#### Back-end con Tecnologías de Código Abierto (SPRING)
-#### [Máster en Ingeniería Web por la U.P.M.](http://miw.etsisi.upm.es)
 
-> Proyecto básicos para el uso de la tecnología Spring
+### Funcionalidad implementada
 
-### Tecnologías necesarias
-* Java
-* Spring
-* Eclipse
-* Maven
-* MySQL
-* Tomcat
+#### Feature.01 - Caducidad de entidades Token
+* Añadir campo creationTimestamp
+* Añadir método hasExpired()
 
+#### Feature.02 - Eliminación de tokens en TokenDao
+* Añadir método void deleteByUser(User user)
 
-### Importar el proyecto mediante Eclipse
-1. Clonar mediante Eclipse este repositorio en la máquina local: https://youtu.be/rQNixJQQ25g
-1. Importar el repositorio clonado: https://youtu.be/yYvD8ZJtWwI
-1. Crear una Base de Datos llamada: `paddle`
+#### Feature.03 - Implementación de entidad Training
+* Añadir entidad Training que se relaciona con:
+ * Una reserva de pista
+ * De 0 a 4 alumnos
+* Añadir método Calendar getStarting()
+* Añadir método Calendar getEnding()
 
-### Documentación
-#### Casos de Uso
-![Casos de uso](/docs/Paddle.UseCaseView.png "Casos de Uso")
-#### Arquitectura de paquetes
-![Casos de uso](/docs/Paddle.Architecture.png "Casos de Uso")
-#### Entidades
-![Casos de uso](/docs/Paddle.Entities.png "Casos de Uso")
-#### Daos
-![Casos de uso](/docs/Paddle.Daos.png "Casos de Uso")
-
-###### Autor: Jesús Bernal Bermúdez U.P.M.
-
+#### Feature.04 - Gestión de entramientos en TrainingDao
+* Creación de entrenamientos
+* Elimininación de entrenamientos
+* Listar entrenamientos existentes
+* Añadir un alumno a un entrenamiento
+* Eliminar un alumno de un entrenamiento
+ 
+###### Autor: Diego Castaño Chillarón
