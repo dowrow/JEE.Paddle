@@ -51,14 +51,15 @@ public class Training {
         return id;
     }
     
-    public void addPupil(User player) {
+    public boolean addPupil(User pupil) {
     	if (this.pupils.size() < MAX_PUPILS) {
-        	this.pupils.add(player);	
+        	return this.pupils.add(pupil);	
     	}
+    	return false;
     }
     
-    public void removePupil(User user) {
-    	pupils.remove(user);
+    public void removePupil(User pupil) {
+    	pupils.remove(pupil);
     }
     
     public Set<User> getPupils() {
