@@ -1,61 +1,68 @@
 package data.entities;
 
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 
 @Entity
 public class Training {
+
+	private static final int MAX_PUPILS = 4;
 
     @Id
     @GeneratedValue
     private int id;
 
-    @OneToOne
-    private Reserve reserve;
+    private int dayOfWeek;
+    
+    private int hourOfDay;
+    
+    private Calendar startDate;
+    
+    private Calendar endDate;
+   
+    @ManyToOne
+    private Court court;
+    
+    @ManyToOne
+    private User trainer;
 
     @OneToMany
-    private Set<User> players;
-    
-    final int MAX_PLAYERS = 4;
-    
-    final int HOURS_PER_TRAINING = 1;
+    private Set<User> pupils;
 
-    public Training(Reserve reserve) {
-        this.reserve = reserve;
-    }
+    public Training(int dayOfWeek, int hourOfDay, Calendar startDate, Calendar endDate, Court court, User trainer) {
+		super();
+		this.dayOfWeek = dayOfWeek;
+		this.hourOfDay = hourOfDay;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.court = court;
+		this.trainer = trainer;
+		this.pupils = new HashSet<User>();
+	}
 
-    public int getId() {
+	public int getId() {
         return id;
     }
     
-    public void addPlayer(User player) {
-    	if (this.players.size() < MAX_PLAYERS) {
-        	this.players.add(player);	
+    public void addPupil(User player) {
+    	if (this.pupils.size() < MAX_PUPILS) {
+        	this.pupils.add(player);	
     	}
     }
     
-    public void removePlayer(User user) {
-    	players.remove(user);
+    public void removePupil(User user) {
+    	pupils.remove(user);
     }
     
-    public Set<User> getPlayers() {
-    	return this.players;
-    }
-
-    public Calendar getStartDate () {
-    	return this.reserve.getDate();
-    }
-    
-    public Calendar getEndDate () {
-    	Calendar end = getStartDate();
-    	end.add(Calendar.HOUR_OF_DAY, HOURS_PER_TRAINING);
-    	return end;
+    public Set<User> getPupils() {
+    	return this.pupils;
     }
    
     @Override
@@ -80,9 +87,39 @@ public class Training {
     @Override
     public String toString() {
         
-        return "Training [id=" + id + ", reserve=" + reserve.getId() + 
-        		", players=" + players + ", start date=" + getStartDate() + 
-        		", end date=" + getEndDate() + "]";
+        return "Training [id=" + id + ", " + 
+	        "dayOfWeek=" + dayOfWeek + ", " +
+	        "hourOfDay=" + hourOfDay + ", " +
+	        "startDate=" + startDate + ", " +
+	        "endDate=" + endDate + ", " +
+	        "court=" + court + ", " +
+	        "trainer=" + trainer + ", " +
+	        "pupils=" + pupils +
+	        "]";
     }
+
+	public static int getMaxPupils() {
+		return MAX_PUPILS;
+	}
+
+	public int getDayOfWeek() {
+		return dayOfWeek;
+	}
+
+	public int getHourOfDay() {
+		return hourOfDay;
+	}
+
+	public Calendar getEndDate() {
+		return endDate;
+	}
+
+	public Court getCourt() {
+		return court;
+	}
+
+	public User getTrainer() {
+		return trainer;
+	}
 
 }

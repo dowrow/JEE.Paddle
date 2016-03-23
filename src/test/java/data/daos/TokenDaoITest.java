@@ -35,7 +35,6 @@ public class TokenDaoITest {
     @Test
     public void testDeleteByUser() {
         Token token = (Token) daosService.getMap().get("tu1");
-        User user = (User) daosService.getMap().get("u4");
         assertEquals(token, tokenDao.findByUser(token.getUser()));
         tokenDao.deleteByUser(token.getUser());
         assertNull(tokenDao.findByUser(token.getUser()));
