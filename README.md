@@ -10,11 +10,13 @@
 * Añadir método void deleteByUser(User user)
 
 #### Feature.03 - Implementación de entidad Training
-* Añadir entidad Training que se relaciona con:
- * Una reserva de pista
+* Añadir entidad Training que consiste en:
+ * Una pista
  * De 0 a 4 alumnos
-* Añadir método Calendar getStarting()
-* Añadir método Calendar getEnding()
+ * Un entrenador
+ * Una fecha de comienzo
+ * Una fecha de fin
+ * Un día y hora de la semana
 
 #### Feature.04 - Gestión de entramientos en TrainingDao
 * Creación de entrenamientos

@@ -7,6 +7,7 @@ import java.util.Calendar;
 import org.junit.Test;
 
 public class TrainingTest {
+	
 	   @Test
 	    public void testAddPupils() {
 	        User trainer = new User("u1", "u1@gmail.com", "p1", Calendar.getInstance());
@@ -21,5 +22,4 @@ public class TrainingTest {
 	        assertTrue(training.addPupil(pupil1));
 	        assertEquals(training.getPupils().size(), 1);
 	    }
-	    
 }
