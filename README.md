@@ -2,14 +2,14 @@
 
 ### Funcionalidad implementada
 
-#### Feature.01 - Caducidad de entidades Token
+#### Caducidad de entidades Token
 * Añadir campo creationTimestamp
 * Añadir método hasExpired()
 
-#### Feature.02 - Eliminación de tokens en TokenDao
+#### Eliminación de tokens en TokenDao
 * Añadir método void deleteByUser(User user)
 
-#### Feature.03 - Implementación de entidad Training
+#### Implementación de entidad Training
 * Añadir entidad Training que consiste en:
  * Una pista
  * De 0 a 4 alumnos
@@ -18,7 +18,7 @@
  * Una fecha de fin
  * Un día y hora de la semana
 
-#### Feature.04 - Gestión de entramientos en TrainingDao
+#### Gestión de entramientos en TrainingDao
 * Creación de entrenamientos
 * Elimininación de entrenamientos
 * Listar entrenamientos existentes

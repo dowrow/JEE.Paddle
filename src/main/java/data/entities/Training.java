@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -18,10 +19,6 @@ public class Training {
     @Id
     @GeneratedValue
     private int id;
-
-    private int dayOfWeek;
-    
-    private int hourOfDay;
     
     private Calendar startDate;
     
@@ -33,13 +30,15 @@ public class Training {
     @ManyToOne
     private User trainer;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     private Set<User> pupils;
 
-    public Training(int dayOfWeek, int hourOfDay, Calendar startDate, Calendar endDate, Court court, User trainer) {
+    public Training() {
+    	
+    }
+    
+    public Training(Calendar startDate, Calendar endDate, Court court, User trainer) {
 		super();
-		this.dayOfWeek = dayOfWeek;
-		this.hourOfDay = hourOfDay;
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.court = court;
@@ -58,8 +57,8 @@ public class Training {
     	return false;
     }
     
-    public void removePupil(User pupil) {
-    	pupils.remove(pupil);
+    public boolean removePupil(User pupil) {
+    	return pupils.remove(pupil);
     }
     
     public Set<User> getPupils() {
@@ -89,8 +88,6 @@ public class Training {
     public String toString() {
         
         return "Training [id=" + id + ", " + 
-	        "dayOfWeek=" + dayOfWeek + ", " +
-	        "hourOfDay=" + hourOfDay + ", " +
 	        "startDate=" + startDate + ", " +
 	        "endDate=" + endDate + ", " +
 	        "court=" + court + ", " +
@@ -101,14 +98,6 @@ public class Training {
 
 	public static int getMaxPupils() {
 		return MAX_PUPILS;
-	}
-
-	public int getDayOfWeek() {
-		return dayOfWeek;
-	}
-
-	public int getHourOfDay() {
-		return hourOfDay;
 	}
 
 	public Calendar getEndDate() {

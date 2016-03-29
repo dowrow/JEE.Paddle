@@ -16,10 +16,12 @@ public class TrainingTest {
 	        Calendar startDate = Calendar.getInstance();
 	        Calendar endDate = Calendar.getInstance();
 	        endDate.add(Calendar.WEEK_OF_MONTH, 4);
-	        Training training = new Training(Calendar.FRIDAY, 18, startDate, endDate, court, trainer);
+	        Training training = new Training(startDate, endDate, court, trainer);
 	        assertNotNull(training.getId());
 	        assertTrue(training.getPupils().isEmpty());
 	        assertTrue(training.addPupil(pupil1));
 	        assertEquals(training.getPupils().size(), 1);
+	        assertTrue(training.removePupil(pupil1));
+	        assertTrue(training.getPupils().isEmpty());
 	    }
 }

@@ -16,6 +16,7 @@ import data.entities.Court;
 import data.entities.Reserve;
 import data.entities.Role;
 import data.entities.Token;
+import data.entities.Training;
 import data.entities.User;
 import data.services.DataService;
 
@@ -36,6 +37,9 @@ public class DaosService {
 
     @Autowired
     private ReserveDao reserveDao;
+    
+    @Autowired
+    private TrainingDao trainingDao;
 
     @Autowired
     private DataService genericService;
@@ -55,17 +59,40 @@ public class DaosService {
         for (User user : this.createPlayers(4, 4)) {
             map.put(user.getUsername(), user);
         }
-        this.createCourts(1, 4);
+        User[] trainers = this.createTrainers(0, 16);
+        for (User trainer : trainers) {
+            map.put(trainer.getUsername(), trainer);
+        }
+        User[] pupils = this.createPlayers(8, 16);
+
+        this.createCourts(1, 8);
         Calendar date = Calendar.getInstance();
         date.add(Calendar.DAY_OF_YEAR, 1);
         date.set(Calendar.HOUR_OF_DAY, 9);
         date.set(Calendar.MINUTE, 0);
         date.set(Calendar.SECOND, 0);
         date.set(Calendar.MILLISECOND, 0);
+        
         for (int i = 0; i < 4; i++) {
             date.add(Calendar.HOUR_OF_DAY, 1);
             reserveDao.save(new Reserve(courtDao.findOne(i+1), users[i], date));
         }
+        
+        for (int i = 0; i < 4; i++) {
+        	int day = Calendar.FRIDAY;
+        	int hour = 12 + i;
+        	Calendar tomorrow = Calendar.getInstance();
+        	tomorrow.add(Calendar.DAY_OF_MONTH, 1);
+        	Calendar twoMonthsFromTomorrow = Calendar.getInstance();
+        	twoMonthsFromTomorrow.add(Calendar.DAY_OF_MONTH, 1);
+        	twoMonthsFromTomorrow.add(Calendar.MONTH, 2);	
+        	Training training = new Training(tomorrow, twoMonthsFromTomorrow, courtDao.findOne(i+1), trainers[i]);
+        	for (int j = i * 4; j <  i * 4 + 4; j++) {
+            	training.addPupil(pupils[j]);	
+        	}
+            trainingDao.save(training);
+        }
+        
     }
 
     public User[] createPlayers(int initial, int size) {
@@ -76,6 +103,16 @@ public class DaosService {
             authorizationDao.save(new Authorization(users[i], Role.PLAYER));
         }
         return users;
+    }
+    
+    public User[] createTrainers(int initial, int size) {
+    	 User[] users = new User[size];
+         for (int i = 0; i < size; i++) {
+             users[i] = new User("t" + (i + initial), "t" + (i + initial) + "@gmail.com", "p", Calendar.getInstance());
+             userDao.save(users[i]);
+             authorizationDao.save(new Authorization(users[i], Role.TRAINER));
+         }
+         return users;
     }
 
     public List<Token> createTokens(User[] users) {
