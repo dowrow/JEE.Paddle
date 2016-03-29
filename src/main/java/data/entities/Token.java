@@ -90,7 +90,11 @@ public class Token {
 
     @Override
     public String toString() {
-        return "Token [id=" + id + ", value=" + value + ", userId=" + user.getId() + "]";
+        return "Token [id=" + id + 
+        		", value=" + value + 
+        		", userId=" + user.getId() + 
+        		", creationTimestamp=" + creationTimestamp.getTime() +
+        		"]";
     }
 
 }

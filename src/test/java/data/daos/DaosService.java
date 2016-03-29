@@ -56,9 +56,16 @@ public class DaosService {
         for (Token token : this.createTokens(users)) {
             map.put("t" + token.getUser().getUsername(), token);
         }
-        for (User user : this.createPlayers(4, 4)) {
+        
+        users = this.createPlayers(4, 4);
+        for (User user : users) {
             map.put(user.getUsername(), user);
         }
+
+        for (Token token : this.createExpiredTokens(users)) {
+        	 map.put("t" + token.getUser().getUsername(), token);
+        }
+        
         User[] trainers = this.createTrainers(0, 16);
         for (User trainer : trainers) {
             map.put(trainer.getUsername(), trainer);
@@ -79,8 +86,7 @@ public class DaosService {
         }
         
         for (int i = 0; i < 4; i++) {
-        	int day = Calendar.FRIDAY;
-        	int hour = 12 + i;
+
         	Calendar tomorrow = Calendar.getInstance();
         	tomorrow.add(Calendar.DAY_OF_MONTH, 1);
         	Calendar twoMonthsFromTomorrow = Calendar.getInstance();
@@ -120,6 +126,21 @@ public class DaosService {
         Token token;
         for (User user : users) {
             token = new Token(user);
+            tokenDao.save(token);
+            tokenList.add(token);
+        }
+        return tokenList;
+    }
+    
+    
+    public List<Token> createExpiredTokens(User[] users) {
+        List<Token> tokenList = new ArrayList<>();
+        Token token;
+        Calendar yesterday = Calendar.getInstance();
+        yesterday.add(Calendar.DAY_OF_MONTH, -1);
+        for (User user : users) {
+            token = new Token(user);
+            token.setCreationTimestamp(yesterday);
             tokenDao.save(token);
             tokenList.add(token);
         }
