@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import business.api.exceptions.InvalidDateException;
 import business.api.exceptions.InvalidTrainingException;
 import business.api.exceptions.NotFoundCourtIdException;
+import business.api.exceptions.NotFoundPlayerIdException;
 import business.api.exceptions.NotFoundTrainingIdException;
 import business.controllers.CourtController;
 import business.controllers.TrainingController;
@@ -70,8 +71,23 @@ public class TrainingResource {
 	
 	 @RequestMapping(value = Uris.ID, method = RequestMethod.DELETE)
 	 public void deleteTraining(@PathVariable int id) throws NotFoundTrainingIdException {
-	        if (!trainingController.deleteTraining(id)) {
-	        	throw new NotFoundTrainingIdException();
-	        }
+		 if (!trainingController.existsTraining(id)) {
+	        throw new NotFoundTrainingIdException();
+	     }   
+		 trainingController.deleteTraining(id);
+	        
 	 }
+	 
+	 @RequestMapping(value = Uris.ID + Uris.PUPILS + Uris.PUPIL_ID, method = RequestMethod.DELETE)
+	 public void deletePupilFromTraining(@PathVariable int id, @PathVariable int pupil_id) throws NotFoundTrainingIdException, NotFoundPlayerIdException
+	 {
+		 if (!trainingController.existsTraining(id)) {
+		       throw new NotFoundTrainingIdException();
+		 }   
+	     if (!trainingController.deletePupilFromTraining(id, pupil_id)) {
+	    	   throw new NotFoundPlayerIdException();
+	     }
+	 }
+	 
+
 }

@@ -14,4 +14,14 @@ public class TrainingController {
 		return false;
 	}
 
+	public boolean existsTraining(int id) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean deletePupilFromTraining(int trainingId, int pupilId) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }
