@@ -16,6 +16,12 @@ public class TrainingCreationWrapper {
 	
 	public TrainingCreationWrapper(int courtId, Calendar startDate, Calendar endDate) {
 		super();
+		startDate.set(Calendar.MINUTE, 0);
+		startDate.set(Calendar.SECOND, 0);
+		startDate.set(Calendar.MILLISECOND, 0);
+		endDate.set(Calendar.MINUTE, 0);
+		endDate.set(Calendar.SECOND, 0);
+		endDate.set(Calendar.MILLISECOND, 0);
 		this.courtId = courtId;
 		this.startDate = startDate;
 		this.endDate = endDate;
@@ -38,10 +44,16 @@ public class TrainingCreationWrapper {
 	}
 
 	public void setStartDate(Calendar startDate) {
+		startDate.set(Calendar.MINUTE, 0);
+		startDate.set(Calendar.SECOND, 0);
+		startDate.set(Calendar.MILLISECOND, 0);
 		this.startDate = startDate;
 	}
 
 	public void setEndDate(Calendar endDate) {
+		endDate.set(Calendar.MINUTE, 0);
+		endDate.set(Calendar.SECOND, 0);
+		endDate.set(Calendar.MILLISECOND, 0);
 		this.endDate = endDate;
 	}
 	

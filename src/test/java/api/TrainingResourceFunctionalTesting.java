@@ -1,10 +1,14 @@
 package api;
 
+import static org.junit.Assert.*;
+
 import java.util.Calendar;
 
 import org.apache.logging.log4j.LogManager;
 import org.junit.After;
 import org.junit.Test;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.client.HttpClientErrorException;
 
 import business.api.Uris;
 import business.wrapper.TrainingCreationWrapper;
@@ -24,11 +28,27 @@ public class TrainingResourceFunctionalTesting {
 		aMonthLater.add(Calendar.MONTH, 1);
 
 		TrainingCreationWrapper wrapper = new TrainingCreationWrapper(courtId, tomorrow, aMonthLater);
-		String response = (String) new RestBuilder<>(RestService.URL).path(Uris.TRAININGS).basicAuth(token, "")
-				.body(wrapper).post().build();
+		new RestBuilder<>(RestService.URL).path(Uris.TRAININGS).basicAuth(token, "").body(wrapper).post().build();
 
-		LogManager.getLogger(this.getClass()).info("testCreateTraining (" + response + ")");
-
+		try {
+			wrapper.setStartDate(aMonthLater);
+			wrapper.setEndDate(tomorrow);
+			new RestBuilder<>(RestService.URL).path(Uris.TRAININGS).basicAuth(token, "").body(wrapper).post().build();
+			fail();
+		} catch (HttpClientErrorException httpError) {
+			assertEquals(httpError.getStatusCode(), HttpStatus.BAD_REQUEST);
+			LogManager.getLogger(this.getClass()).info(
+					"testCreateTraining (" + httpError.getMessage() + "):\n    " + httpError.getResponseBodyAsString());
+		}
+		try {
+			wrapper.setCourtId(-1);
+			new RestBuilder<>(RestService.URL).path(Uris.TRAININGS).basicAuth(token, "").body(wrapper).post().build();
+			fail();
+		} catch (HttpClientErrorException httpError) {
+			assertEquals(httpError.getStatusCode(), HttpStatus.NOT_FOUND);
+			LogManager.getLogger(this.getClass()).info(
+					"testCreateTraining (" + httpError.getMessage() + "):\n    " + httpError.getResponseBodyAsString());
+		}
 	}
 
 	@After
