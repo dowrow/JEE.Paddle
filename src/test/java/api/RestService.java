@@ -31,4 +31,12 @@ public class RestService {
         new RestBuilder<Object>(URL).path(Uris.COURTS).param("id", id).basicAuth(this.loginAdmin(), "").post().build();
     }
 
+	public String registerAndLoginTrainer() {
+		 UserWrapper player = new UserWrapperBuilder().build();
+	     new RestBuilder<Object>(URL).path(Uris.USERS).body(player).post().build();
+	     TokenWrapper token = new RestBuilder<TokenWrapper>(URL).path(Uris.TOKENS).basicAuth(player.getUsername(), player.getPassword())
+	    		 .clazz(TokenWrapper.class).post().build();
+	     return token.getToken();
+	}
+
 }

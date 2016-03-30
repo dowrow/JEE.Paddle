@@ -37,6 +37,7 @@ public class UserResourceFunctionalTesting {
 
     @Test
     public void testRepeatingFieldCreate() {
+    	new RestService().deleteAll();
         UserWrapper userWrapper = new UserWrapperBuilder(0).build();
         new RestBuilder<Object>(RestService.URL).path(Uris.USERS).body(userWrapper).post().build();
         try {

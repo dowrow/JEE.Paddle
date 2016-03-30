@@ -7,7 +7,6 @@ import business.wrapper.UserWrapper;
 import data.daos.AuthorizationDao;
 import data.daos.UserDao;
 import data.entities.Authorization;
-import data.entities.Role;
 import data.entities.User;
 
 @Controller
@@ -32,7 +31,7 @@ public class UserController {
                 && null == userDao.findByUsernameOrEmail(userWrapper.getEmail())) {
             User user = new User(userWrapper.getUsername(), userWrapper.getEmail(), userWrapper.getPassword(), userWrapper.getBirthDate());
             userDao.save(user);
-            authorizationDao.save(new Authorization(user, Role.PLAYER));
+            authorizationDao.save(new Authorization(user, userWrapper.getRole()));
             return true;
         } else {
             return false;

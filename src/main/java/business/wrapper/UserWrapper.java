@@ -3,6 +3,8 @@ package business.wrapper;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import data.entities.Role;
+
 public class UserWrapper {
 
     private String username;
@@ -13,6 +15,8 @@ public class UserWrapper {
 
     private Calendar birthDate;
 
+    private Role role;
+    
     public UserWrapper() {
     }
 
@@ -21,6 +25,15 @@ public class UserWrapper {
         this.email = email;
         this.password = password;
         this.birthDate = birthDate;
+        this.role = Role.PLAYER;
+    }
+    
+    public UserWrapper(String username, String email, String password, Calendar birthDate, Role role) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.birthDate = birthDate;
+        this.role = role;
     }
 
     public String getUsername() {
@@ -60,5 +73,9 @@ public class UserWrapper {
         String time = new SimpleDateFormat("dd-MMM-yyyy ").format(birthDate.getTime());
         return "UserWrapper [username=" + username + ", email=" + email + ", password=" + password + ", birthDate=" + time + "]";
     }
+
+	public Role getRole() {
+		return role;
+	}
 
 }
