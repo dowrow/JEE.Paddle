@@ -3,6 +3,8 @@ package business.wrapper;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+import data.entities.Role;
+
 public class UserWrapperBuilder {
 
     private UserWrapper userWrapper;
@@ -32,6 +34,11 @@ public class UserWrapperBuilder {
 
     public UserWrapperBuilder birthDate(Calendar birthDate) {
         userWrapper.setBirthDate(birthDate);
+        return this;
+    }
+    
+    public UserWrapperBuilder role(Role role) {
+        userWrapper.setRole(role);
         return this;
     }
 

@@ -78,4 +78,8 @@ public class UserWrapper {
 		return role;
 	}
 
+	public void setRole(Role role2) {
+		this.role = role2;
+	}
+
 }

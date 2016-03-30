@@ -1,5 +1,6 @@
 package business.controllers;
 
+import java.util.Calendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,14 +25,38 @@ public class TrainingController {
 	private CourtDao courtDao;
 	
 	@Autowired
+	private ReserveController reserveController;
+	
+	@Autowired
 	private TrainingDao trainingDao;
 
-	public boolean createTraining(String username, TrainingCreationWrapper wrapper) {
-		User trainer = userDao.findByUsernameOrEmail(username);
+	public boolean createTraining(String trainerUsername, TrainingCreationWrapper wrapper) {
+		if (isAvailableCourt(wrapper.getCourtId(), wrapper.getStartDate(), wrapper.getEndDate())) {
+			reserveCourt(wrapper.getCourtId(), wrapper.getStartDate(), wrapper.getEndDate(), trainerUsername);		
+		} else {
+			return false;
+		}
+		User trainer = userDao.findByUsernameOrEmail(trainerUsername);
 		Court court = courtDao.findById(wrapper.getCourtId());
 		Training training = new Training(wrapper.getStartDate(), wrapper.getEndDate(), court, trainer);
 		trainingDao.save(training);
-		return false;
+		return true;
+	}
+
+
+	private boolean isAvailableCourt(int courtId, Calendar startDate, Calendar endDate) {
+		for (Calendar datetime = startDate; datetime.compareTo(endDate) >= 0; datetime.add(Calendar.WEEK_OF_YEAR, 1)) {
+			if (!reserveController.isAvailable(courtId, datetime)) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	private void reserveCourt(int courtId, Calendar startDate, Calendar endDate, String trainerUsername) {
+		for (Calendar datetime = startDate; datetime.compareTo(endDate) >= 0; datetime.add(Calendar.WEEK_OF_YEAR, 1)) {
+			reserveController.reserveCourt(courtId, datetime, trainerUsername);
+		}
 	}
 
 	public boolean deleteTraining(int id) {

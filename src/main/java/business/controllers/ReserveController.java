@@ -68,10 +68,14 @@ public class ReserveController {
         }
         return new Availability(calendarDay, allTimesAvailable);
     }
+    
+    public boolean isAvailable(int courtId, Calendar date) {
+    	return (reserveDao.findByCourtAndDate(courtDao.findOne(courtId), date) == null);
+    }
 
     public boolean reserveCourt(int courtId, Calendar date, String username) {
         Reserve reserve = new Reserve(courtDao.findOne(courtId), date);
-        if (reserveDao.findByCourtAndDate(reserve.getCourt(), reserve.getDate()) != null) {
+        if (!isAvailable(courtId, date)) {
             return false;
         }
         reserve.setUser(userDao.findByUsernameOrEmail(username));
