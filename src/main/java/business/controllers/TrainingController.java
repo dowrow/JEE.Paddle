@@ -1,7 +1,5 @@
 package business.controllers;
 
-import java.util.Calendar;
-
 import business.wrapper.TrainingCreationWrapper;
 
 public class TrainingController {
@@ -11,7 +9,7 @@ public class TrainingController {
 		return false;
 	}
 
-	public boolean isValidStartDate(Calendar startDate) {
+	public boolean deleteTraining(int id) {
 		// TODO Auto-generated method stub
 		return false;
 	}
