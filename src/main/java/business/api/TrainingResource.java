@@ -17,6 +17,7 @@ import business.api.exceptions.InvalidTrainingException;
 import business.api.exceptions.NotFoundCourtIdException;
 import business.api.exceptions.NotFoundPlayerIdException;
 import business.api.exceptions.NotFoundTrainingIdException;
+import business.api.exceptions.TrainingNotAvailableException;
 import business.controllers.CourtController;
 import business.controllers.TrainingController;
 import business.wrapper.TrainingCreationWrapper;
@@ -73,6 +74,16 @@ public class TrainingResource {
 		return trainingController.getAvailableTrainings();
 	}
 
+	@RequestMapping(method = RequestMethod.POST, value = Uris.ID + Uris.PUPILS)
+	public void addPupilToTraining(@AuthenticationPrincipal User activeUser, @PathVariable int trainingId) throws NotFoundTrainingIdException, TrainingNotAvailableException {
+		if (!trainingController.existsTraining(trainingId)) {
+			throw new NotFoundTrainingIdException();
+		}
+		if (!trainingController.addPupilToTraining(trainingId, activeUser.getUsername())) {
+			throw new TrainingNotAvailableException();
+		}
+	}
+	
 	@RequestMapping(value = Uris.ID, method = RequestMethod.DELETE)
 	public void deleteTraining(@PathVariable int id) throws NotFoundTrainingIdException {
 		if (!trainingController.existsTraining(id)) {
