@@ -16,6 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import data.daos.AuthorizationDao;
+import data.daos.TokenDao;
 import data.daos.UserDao;
 import data.entities.Role;
 import data.entities.User;
@@ -28,11 +29,15 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private UserDao userDao;
 
     @Autowired
+    private TokenDao tokenDao;
+
+    @Autowired
     private AuthorizationDao authorizationDao;
 
     @Override
     public UserDetails loadUserByUsername(final String usernameOrEmailOrTokenValue) throws UsernameNotFoundException {
-        User user = userDao.findByTokenValue(usernameOrEmailOrTokenValue);
+        tokenDao.deleteExpiredTokens();
+    	User user = userDao.findByTokenValue(usernameOrEmailOrTokenValue);
         if (user != null) {
             List<Role> roleList = authorizationDao.findRoleByUser(user);
             return this.userBuilder(user.getUsername(), new BCryptPasswordEncoder().encode(""), roleList);
