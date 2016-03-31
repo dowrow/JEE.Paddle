@@ -1,30 +1,20 @@
 package web;
 
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import javax.servlet.ServletContext;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.servlet.ModelAndView;
 
 import business.controllers.TrainingController;
 import business.wrapper.TrainingCreationWrapper;
@@ -33,9 +23,6 @@ import business.wrapper.TrainingCreationWrapper;
 @Scope(WebApplicationContext.SCOPE_SESSION)
 @SessionAttributes("name")
 public class Presenter {
-
-    @Autowired
-    private ServletContext servletContext;
     
     @Autowired
     private TrainingController trainingController;
@@ -64,8 +51,25 @@ public class Presenter {
     
     @RequestMapping(value = "/create-training", method = RequestMethod.POST)
     public String createTrainingSubmit(TrainingCreationWrapper wrapper, BindingResult bindingResult, Model model) {
-    	
-        return theme + "/create-training-result";
+    	if (bindingResult.hasErrors()) {
+    		List<FieldError> errors = bindingResult.getFieldErrors(); 
+    		String invalidFields = "";
+    		for (FieldError error : errors) {
+    			invalidFields += error.getField();
+    			if (errors.indexOf(error) != (errors.size() - 1)) {
+    				invalidFields += ",";
+    			}
+    		}
+    		
+    		model.addAttribute("error", "El valor de estos campos no es válido: " + invalidFields);
+    	} else {
+    		if (trainingController.createTraining("trainer01", wrapper) != null) {
+        		model.addAttribute("createdTraining", wrapper);
+        	} else {
+        		model.addAttribute("error", "Esa pista no está disponible en el horario seleccionado.");
+        	}
+    	}
+    	return theme + "/create-training-result";
     }
     
     @RequestMapping("/show-trainings")

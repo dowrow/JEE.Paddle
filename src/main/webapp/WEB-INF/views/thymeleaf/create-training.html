@@ -9,7 +9,17 @@
 	<h1>Proyecto Paddle</h1>
 	<h3>Crear entrenamiento</h3>
 	
-	<form action="#" th:action="@{/create-training}" th:object="${creationTrainingWrapper}" method="post">
+	<form action="#" th:action="@{/create-training}" th:object="${trainingCreationWrapper}" method="post">
+	
+		<label for="startDate">Fecha de comienzo:</label>
+		<input type="datetime-local" placeholder="2016-8-16T15:25:33" id="startDate" name="startDate" th:value="*{startDate}" />
+		
+		<label for="endDate">Fecha de fin:</label>
+		<input type="datetime-local" placeholder="2016-12-16T15:25:33" id="endDate" name="endDate" th:value="*{endDate}" />
+		
+		<label for="startDate">Nº de Pista:</label>
+		<input type="number" id="courtId" name="courtId" th:value="*{courtId}" />
+		
 		<input type="submit"/>
 	</form>
 	<p>

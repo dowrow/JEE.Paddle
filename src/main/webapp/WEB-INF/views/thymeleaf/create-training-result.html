@@ -9,6 +9,12 @@
 	<h1>Proyecto Paddle</h1>
 	<h3>Creación de entrenamiento</h3>
 	
+	<strong th:if="${error!=null}" th:text="${error}"></strong>
+	<p th:if="${createdTraining!=null}">
+		<span>Se creó el entrenamiento:</span>
+		<span th:text="${createdTraining}"></span>
+	</p>
+	
 	<p>
 		<a th:href="@{/home}">Volver a home</a>
 		<a th:href="@{/create-training}">Crear otro entrenamiento</a>

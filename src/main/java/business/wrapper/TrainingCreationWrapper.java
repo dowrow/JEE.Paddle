@@ -4,14 +4,17 @@ import java.util.Calendar;
 
 public class TrainingCreationWrapper {
 	
-	private int courtId;
+	public int courtId;
 	
-	private Calendar startDate;
+	public Calendar startDate;
 	
-	private Calendar endDate;
+	public Calendar endDate;
 	
 	public TrainingCreationWrapper() {
-		
+		this.startDate = Calendar.getInstance();
+		this.startDate.add(Calendar.DAY_OF_MONTH, 1);
+		this.endDate = Calendar.getInstance();
+		this.endDate.add(Calendar.MONTH, 1);
 	}
 	
 	public TrainingCreationWrapper(int courtId, Calendar startDate, Calendar endDate) {
