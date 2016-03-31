@@ -20,9 +20,6 @@ import data.entities.Training;
 public class TrainingDaoITest {
 
     @Autowired
-    private DaosService daosService;
-
-    @Autowired
     private TrainingDao trainingDao;
 
     @Test
