@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import data.entities.Role;
+import data.entities.User;
 
 public class UserWrapper {
 
@@ -17,7 +18,17 @@ public class UserWrapper {
 
     private Role role;
     
-    public UserWrapper() {
+    private int id;
+    
+    public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public UserWrapper() {
     }
 
     public UserWrapper(String username, String email, String password, Calendar birthDate) {
@@ -26,6 +37,7 @@ public class UserWrapper {
         this.password = password;
         this.birthDate = birthDate;
         this.role = Role.PLAYER;
+        this.id = 0;
     }
     
     public UserWrapper(String username, String email, String password, Calendar birthDate, Role role) {
@@ -34,9 +46,19 @@ public class UserWrapper {
         this.password = password;
         this.birthDate = birthDate;
         this.role = role;
+        this.id = 0;
     }
 
-    public String getUsername() {
+    public UserWrapper(User pupil) {
+		this.username = pupil.getUsername();
+		this.email = pupil.getEmail();
+		this.password = pupil.getPassword();
+		this.birthDate = pupil.getBirthDate();
+		this.role = Role.PLAYER;
+		this.id = pupil.getId();
+	}
+
+	public String getUsername() {
         return username;
     }
 

@@ -12,7 +12,7 @@ import data.entities.Role;
 public class RestService {
 
 	public static final String URL = "http://localhost:8080/JEE.Paddle.0.0.1-SNAPSHOT" + Uris.SERVLET_MAP;
-
+	
 	public void deleteAll() {
 		new RestBuilder<TokenWrapper>(RestService.URL).path(Uris.ADMINS).basicAuth(this.loginAdmin(), "").delete()
 				.build();
@@ -22,10 +22,6 @@ public class RestService {
 		TokenWrapper token = new RestBuilder<TokenWrapper>(URL).path(Uris.TOKENS).basicAuth("admin", "admin")
 				.clazz(TokenWrapper.class).post().build();
 		return token.getToken();
-	}
-	
-	public void logOut(String username) {
-		
 	}
 
 	public String registerAndLoginPlayer() {
@@ -46,6 +42,7 @@ public class RestService {
 	
 	public String registerAndLoginTrainer(String username, String password) {
 		UserWrapper player = new UserWrapperBuilder().username(username).password(password).role(Role.TRAINER).build();
+		
 		try {
 			new RestBuilder<Object>(URL).path(Uris.USERS).body(player).post().build();
 		} catch (HttpClientErrorException httpError) {

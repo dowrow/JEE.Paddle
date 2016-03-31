@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 
 import business.wrapper.TrainingCreationWrapper;
 import business.wrapper.TrainingWrapper;
+import business.wrapper.UserWrapper;
 import data.daos.CourtDao;
 import data.daos.TrainingDao;
 import data.daos.UserDao;
@@ -111,6 +112,16 @@ public class TrainingController {
 		}
 		trainingDao.save(training);
 		return true;
+	}
+
+
+	public List<UserWrapper> getPupils(int id) {
+		List<UserWrapper> pupils = new ArrayList<>();
+		Training training = trainingDao.findOne(id);
+		for (User pupil : training.getPupils()) {
+			pupils.add(new UserWrapper(pupil));
+		}
+		return pupils;
 	}
 
 }

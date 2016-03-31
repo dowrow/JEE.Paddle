@@ -22,6 +22,7 @@ import business.controllers.CourtController;
 import business.controllers.TrainingController;
 import business.wrapper.TrainingCreationWrapper;
 import business.wrapper.TrainingWrapper;
+import business.wrapper.UserWrapper;
 
 @RestController
 @RequestMapping(Uris.SERVLET_MAP + Uris.TRAININGS)
@@ -76,6 +77,11 @@ public class TrainingResource {
 	@RequestMapping(method = RequestMethod.GET)
 	public List<TrainingWrapper> showTrainings() {
 		return trainingController.getAvailableTrainings();
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = Uris.ID + Uris.PUPILS)
+	public List<UserWrapper> showPupils(@PathVariable int id) {
+		return trainingController.getPupils(id);
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = Uris.ID + Uris.PUPILS)

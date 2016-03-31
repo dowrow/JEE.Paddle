@@ -18,6 +18,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import business.api.Uris;
 import business.wrapper.TrainingCreationWrapper;
 import business.wrapper.TrainingWrapper;
+import business.wrapper.UserWrapper;
 
 public class TrainingResourceFunctionalTesting {
 	
@@ -112,6 +113,26 @@ public class TrainingResourceFunctionalTesting {
 		TrainingCreationWrapper wrapper = new TrainingCreationWrapper(courtId, tomorrow, aMonthLater);
 		TrainingWrapper response = new RestBuilder<TrainingWrapper>(RestService.URL).path(Uris.TRAININGS).basicAuth(trainerToken, "").clazz(TrainingWrapper.class).body(wrapper).post().build();
 		new RestBuilder<>(RestService.URL).path(Uris.TRAININGS + "/" + response.getId() + Uris.PUPILS).basicAuth(trainerToken, "").post().build();
+	}
+
+	@Test
+	public void testDeletePupilFromTraining() {
+		Calendar tomorrow = Calendar.getInstance();
+		tomorrow.add(Calendar.DAY_OF_MONTH, 1);
+		Calendar aMonthLater = (Calendar) tomorrow.clone();
+		aMonthLater.add(Calendar.MONTH, 1);
+		TrainingCreationWrapper wrapper = new TrainingCreationWrapper(courtId, tomorrow, aMonthLater);
+		// create training
+		TrainingWrapper response = new RestBuilder<TrainingWrapper>(RestService.URL).path(Uris.TRAININGS).basicAuth(trainerToken, "").clazz(TrainingWrapper.class).body(wrapper).post().build();		
+		// add a pupil
+		new RestBuilder<>(RestService.URL).path(Uris.TRAININGS + "/" + response.getId() + Uris.PUPILS).basicAuth(trainerToken, "").post().build();
+		// get its id
+		List<UserWrapper> pupils = Arrays.asList(new RestBuilder<UserWrapper[]>(RestService.URL).path(Uris.TRAININGS + "/" + response.getId() + Uris.PUPILS).basicAuth(trainerToken, "").clazz(UserWrapper[].class).get().build());
+	    LogManager.getLogger(this.getClass()).info(
+				"testDeletePupilFromTraining (pupils):\n    " + pupils);
+		// delete pupil
+		new RestBuilder<>(RestService.URL).path(Uris.TRAININGS + "/" + response.getId() + Uris.PUPILS + "/" + pupils.get(0).getId()).basicAuth(trainerToken, "").delete().build();
+
 	}
 	
 	@After
