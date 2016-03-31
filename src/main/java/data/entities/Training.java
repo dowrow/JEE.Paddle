@@ -99,7 +99,9 @@ public class Training {
 	public static int getMaxPupils() {
 		return MAX_PUPILS;
 	}
-
+	public Calendar getStartDate() {
+		return startDate;
+	}
 	public Calendar getEndDate() {
 		return endDate;
 	}

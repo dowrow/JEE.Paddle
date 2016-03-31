@@ -42,15 +42,19 @@ public class TrainingResource {
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public void createTraining(@AuthenticationPrincipal User activeUser, @RequestBody TrainingCreationWrapper wrapper)
+	public TrainingWrapper createTraining(@AuthenticationPrincipal User activeUser, @RequestBody TrainingCreationWrapper wrapper)
 			throws NotFoundCourtIdException, InvalidDateException, InvalidTrainingException {
 		if (!courtController.exist(wrapper.getCourtId())) {
 			throw new NotFoundCourtIdException();
 		}
 		this.validateDates(wrapper.getStartDate(), wrapper.getEndDate());
-		if (!trainingController.createTraining(activeUser.getUsername(), wrapper)) {
+		
+		TrainingWrapper createdTraining = trainingController.createTraining(activeUser.getUsername(), wrapper);
+		
+		if (createdTraining == null) {
 			throw new InvalidTrainingException("No se pudo reservar la pista en las fechas seleccionada");
 		}
+		return createdTraining;
 
 	}
 

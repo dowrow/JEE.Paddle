@@ -87,4 +87,9 @@ public class ReserveController {
         return hour >= START_TIME && hour <= END_TIME;
     }
 
+	public void freeCourt(int courtId, Calendar date, String trainerUsername) {
+		Reserve reserve = reserveDao.findByCourtAndDate(courtDao.findOne(courtId), date);
+		reserveDao.delete(reserve);
+	}
+
 }

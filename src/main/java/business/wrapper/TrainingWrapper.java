@@ -2,6 +2,8 @@ package business.wrapper;
 
 import java.util.Calendar;
 
+import data.entities.Training;
+
 public class TrainingWrapper {
 	
 	private int id;
@@ -41,6 +43,19 @@ public class TrainingWrapper {
 		this.courtId = courtId;
 		this.startDate = startDate;
 		this.endDate = endDate;
+	}
+
+	public TrainingWrapper(Training training) {
+		super();
+		this.id = training.getId();
+		this.trainerId = training.getTrainer().getId();
+		this.courtId = training.getCourt().getId();
+		this.startDate = training.getStartDate();
+		this.endDate = training.getEndDate();
+	}
+	
+	public TrainingWrapper() {
+		
 	}
 
 }

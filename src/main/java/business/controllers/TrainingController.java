@@ -30,17 +30,17 @@ public class TrainingController {
 	@Autowired
 	private TrainingDao trainingDao;
 
-	public boolean createTraining(String trainerUsername, TrainingCreationWrapper wrapper) {
+	public TrainingWrapper createTraining(String trainerUsername, TrainingCreationWrapper wrapper) {
 		if (isAvailableCourt(wrapper.getCourtId(), wrapper.getStartDate(), wrapper.getEndDate())) {
 			reserveCourt(wrapper.getCourtId(), wrapper.getStartDate(), wrapper.getEndDate(), trainerUsername);		
 		} else {
-			return false;
+			return null;
 		}
 		User trainer = userDao.findByUsernameOrEmail(trainerUsername);
 		Court court = courtDao.findById(wrapper.getCourtId());
 		Training training = new Training(wrapper.getStartDate(), wrapper.getEndDate(), court, trainer);
 		trainingDao.save(training);
-		return true;
+		return new TrainingWrapper(training);
 	}
 
 
@@ -58,20 +58,36 @@ public class TrainingController {
 			reserveController.reserveCourt(courtId, datetime, trainerUsername);
 		}
 	}
+	
+	private void freeCourt(int courtId, Calendar startDate, Calendar endDate, String trainerUsername) {
+		for (Calendar datetime = startDate; datetime.compareTo(endDate) >= 0; datetime.add(Calendar.WEEK_OF_YEAR, 1)) {
+			reserveController.freeCourt(courtId, datetime, trainerUsername);
+		}
+	}
 
 	public boolean deleteTraining(int id) {
-		// TODO Auto-generated method stub
-		return false;
+		if (!existsTraining(id)){
+			return false;
+		}
+		Training training = trainingDao.findOne(id);
+		freeCourt(training.getCourt().getId(), training.getStartDate(), training.getEndDate(), training.getTrainer().getUsername());
+		trainingDao.delete(id);
+		return true;
 	}
 
 	public boolean existsTraining(int id) {
-		// TODO Auto-generated method stub
-		return false;
+		return (trainingDao.exists(id));
 	}
 
 	public boolean deletePupilFromTraining(int trainingId, int pupilId) {
-		// TODO Auto-generated method stub
-		return false;
+		Training training = trainingDao.findOne(trainingId);
+		User pupil = userDao.findOne(pupilId);
+		if (!training.getPupils().contains(pupil)) {
+			return false;
+		}
+		training.removePupil(pupil);
+		trainingDao.save(training);
+		return true;
 	}
 
 	public List<TrainingWrapper> getAvailableTrainings() {
