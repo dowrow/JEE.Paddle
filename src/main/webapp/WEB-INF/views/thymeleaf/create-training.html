@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+<meta charset="utf-8" />
+<title>Proyecto Paddle</title>
+</head>
+
+<body>
+	<h1>Proyecto Paddle</h1>
+	<h3>Crear entrenamiento</h3>
+	
+	<form action="#" th:action="@{/create-training}" th:object="${creationTrainingWrapper}" method="post">
+		<input type="submit"/>
+	</form>
+	<p>
+		<a th:href="@{/home}">Volver a home</a>
+	</p>
+
+</body>
+</html>

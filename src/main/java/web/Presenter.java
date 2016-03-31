@@ -26,17 +26,21 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.ModelAndView;
 
+import business.controllers.TrainingController;
+import business.wrapper.TrainingCreationWrapper;
+
 @Controller
 @Scope(WebApplicationContext.SCOPE_SESSION)
 @SessionAttributes("name")
 public class Presenter {
 
-    private static final List<String> THEMES = Arrays.asList("thymeleaf");
-
     @Autowired
     private ServletContext servletContext;
-
-    private String theme = THEMES.get(0);
+    
+    @Autowired
+    private TrainingController trainingController;
+    
+    private String theme = "thymeleaf";
 
     public Presenter() {
     }
@@ -49,9 +53,24 @@ public class Presenter {
 
     @RequestMapping("/home")
     public String home(Model model) {
-        model.addAttribute("themes", THEMES);
-        //La vista resultante no lleva extensión (.jsp) configurado en WebConfig.java
         return theme + "/home";
     }
-
+    
+    @RequestMapping(value = "/create-training", method = RequestMethod.GET)
+    public String createTraining(Model model) {
+    	model.addAttribute("trainingCreationWrapper", new TrainingCreationWrapper());
+    	return theme + "/create-training";
+    }
+    
+    @RequestMapping(value = "/create-training", method = RequestMethod.POST)
+    public String createTrainingSubmit(TrainingCreationWrapper wrapper, BindingResult bindingResult, Model model) {
+    	
+        return theme + "/create-training-result";
+    }
+    
+    @RequestMapping("/show-trainings")
+    public String showTrainings(Model model) {
+    	model.addAttribute("trainings", trainingController.getAvailableTrainings());
+        return theme + "/show-trainings";
+    }
 }

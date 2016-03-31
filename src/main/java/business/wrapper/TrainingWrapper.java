@@ -57,5 +57,13 @@ public class TrainingWrapper {
 	public TrainingWrapper() {
 		
 	}
+	
+	@Override
+	public String toString() {
+		return "Id. del entrenador: " + this.getTrainerId() + ". " +
+				"Pista nº: " + this.getCourtId() + ". " + 
+				"Empieza el: " + this.getStartDate().getTime() + ". " +
+				"Termina el: " + this.getEndDate().getTime() + ". ";
 
+	}
 }
