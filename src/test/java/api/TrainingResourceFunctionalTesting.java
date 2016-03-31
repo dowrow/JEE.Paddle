@@ -1,9 +1,12 @@
 package api;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.junit.After;
@@ -20,32 +23,29 @@ public class TrainingResourceFunctionalTesting {
 	
 	private RestService restService = new RestService();
 	private int courtId = 10;
-	private String token;
+	private String trainerToken;
 	
 	@Before
 	public void before() {
 		restService.deleteAll();
 		restService.createCourt(courtId + "");
-		token = restService.registerAndLoginTrainer();
+		trainerToken = restService.registerAndLoginTrainer();
 	}
 	
 	@Test
 	public void testCreateTraining() {
-	
 		Calendar tomorrow = Calendar.getInstance();
 		tomorrow.add(Calendar.DAY_OF_MONTH, 1);
 		Calendar aMonthLater = (Calendar) tomorrow.clone();
 		aMonthLater.add(Calendar.MONTH, 1);
-
 		TrainingCreationWrapper wrapper = new TrainingCreationWrapper(courtId, tomorrow, aMonthLater);
-		TrainingWrapper response = new RestBuilder<TrainingWrapper>(RestService.URL).path(Uris.TRAININGS).basicAuth(token, "").clazz(TrainingWrapper.class).body(wrapper).post().build();
+		TrainingWrapper response = new RestBuilder<TrainingWrapper>(RestService.URL).path(Uris.TRAININGS).basicAuth(trainerToken, "").clazz(TrainingWrapper.class).body(wrapper).post().build();
 		LogManager.getLogger(this.getClass()).info(
 				"testCreateTraining (response):\n    " + response);
-		
 		try {
 			wrapper.setStartDate(aMonthLater);
 			wrapper.setEndDate(tomorrow);
-			new RestBuilder<TrainingWrapper>(RestService.URL).path(Uris.TRAININGS).basicAuth(token, "").clazz(TrainingWrapper.class).body(wrapper).post().build();
+			new RestBuilder<TrainingWrapper>(RestService.URL).path(Uris.TRAININGS).basicAuth(trainerToken, "").clazz(TrainingWrapper.class).body(wrapper).post().build();
 			fail();
 		} catch (HttpClientErrorException httpError) {
 			assertEquals(httpError.getStatusCode(), HttpStatus.BAD_REQUEST);
@@ -54,7 +54,7 @@ public class TrainingResourceFunctionalTesting {
 		}
 		try {
 			wrapper.setCourtId(-1);
-			new RestBuilder<TrainingWrapper>(RestService.URL).path(Uris.TRAININGS).basicAuth(token, "").clazz(TrainingWrapper.class).body(wrapper).post().build();
+			new RestBuilder<TrainingWrapper>(RestService.URL).path(Uris.TRAININGS).basicAuth(trainerToken, "").clazz(TrainingWrapper.class).body(wrapper).post().build();
 			fail();
 		} catch (HttpClientErrorException httpError) {
 			assertEquals(httpError.getStatusCode(), HttpStatus.NOT_FOUND);
@@ -66,25 +66,52 @@ public class TrainingResourceFunctionalTesting {
 	
 	@Test
 	public void testDeleteTraining() {
-	
 		Calendar tomorrow = Calendar.getInstance();
 		tomorrow.add(Calendar.DAY_OF_MONTH, 1);
 		Calendar aMonthLater = (Calendar) tomorrow.clone();
 		aMonthLater.add(Calendar.MONTH, 1);
-
 		TrainingCreationWrapper wrapper = new TrainingCreationWrapper(courtId, tomorrow, aMonthLater);
-	    TrainingWrapper response = new RestBuilder<TrainingWrapper>(RestService.URL).path(Uris.TRAININGS).basicAuth(token, "").clazz(TrainingWrapper.class).body(wrapper).post().build();
-	    new RestBuilder<>(RestService.URL).path(Uris.TRAININGS + "/" + response.getId()).basicAuth(token, "").delete().build();	
-		
+	    TrainingWrapper response = new RestBuilder<TrainingWrapper>(RestService.URL).path(Uris.TRAININGS).basicAuth(trainerToken, "").clazz(TrainingWrapper.class).body(wrapper).post().build();
+	    new RestBuilder<>(RestService.URL).path(Uris.TRAININGS + "/" + response.getId()).basicAuth(trainerToken, "").delete().build();	
 		try {
-			new RestBuilder<>(RestService.URL).path(Uris.TRAININGS + "/999999").basicAuth(token, "").delete().build();	
+			new RestBuilder<>(RestService.URL).path(Uris.TRAININGS + "/999999").basicAuth(trainerToken, "").delete().build();	
 			fail();
 		} catch (HttpClientErrorException httpError) {
 			assertEquals(httpError.getStatusCode(), HttpStatus.NOT_FOUND);
 			LogManager.getLogger(this.getClass()).info(
 					"testDeleteTraining (" + httpError.getMessage() + "):\n    " + httpError.getResponseBodyAsString());
 		}
+	}
+	
+	@Test
+	public void testShowTrainings() {
+	    List<TrainingWrapper> list = Arrays.asList(new RestBuilder<TrainingWrapper[]>(RestService.URL).path(Uris.TRAININGS).basicAuth(trainerToken, "").clazz(TrainingWrapper[].class).get().build());
+	    LogManager.getLogger(this.getClass()).info(
+				"testShowTrainings:\n    " + list);
+	    assertTrue(list.isEmpty());
+		Calendar tomorrow = Calendar.getInstance();
+		tomorrow.add(Calendar.DAY_OF_MONTH, 1);
+		Calendar aMonthLater = (Calendar) tomorrow.clone();
+		aMonthLater.add(Calendar.MONTH, 1);
+		TrainingCreationWrapper wrapper = new TrainingCreationWrapper(courtId, tomorrow, aMonthLater);
+		new RestBuilder<TrainingWrapper>(RestService.URL).path(Uris.TRAININGS).basicAuth(trainerToken, "").clazz(TrainingWrapper.class).body(wrapper).post().build();
 		
+		list = Arrays.asList(new RestBuilder<TrainingWrapper[]>(RestService.URL).path(Uris.TRAININGS).basicAuth(trainerToken, "").clazz(TrainingWrapper[].class).get().build());
+	    LogManager.getLogger(this.getClass()).info(
+				"testShowTrainings:\n    " + list);
+		assertEquals(list.size(), 1);
+	}
+	
+
+	@Test
+	public void testAddPupilToTraining() {
+		Calendar tomorrow = Calendar.getInstance();
+		tomorrow.add(Calendar.DAY_OF_MONTH, 1);
+		Calendar aMonthLater = (Calendar) tomorrow.clone();
+		aMonthLater.add(Calendar.MONTH, 1);
+		TrainingCreationWrapper wrapper = new TrainingCreationWrapper(courtId, tomorrow, aMonthLater);
+		TrainingWrapper response = new RestBuilder<TrainingWrapper>(RestService.URL).path(Uris.TRAININGS).basicAuth(trainerToken, "").clazz(TrainingWrapper.class).body(wrapper).post().build();
+		new RestBuilder<>(RestService.URL).path(Uris.TRAININGS + "/" + response.getId() + Uris.PUPILS).basicAuth(trainerToken, "").post().build();
 	}
 	
 	@After

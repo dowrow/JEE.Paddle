@@ -79,11 +79,11 @@ public class TrainingResource {
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = Uris.ID + Uris.PUPILS)
-	public void addPupilToTraining(@AuthenticationPrincipal User activeUser, @PathVariable int trainingId) throws NotFoundTrainingIdException, TrainingNotAvailableException {
-		if (!trainingController.existsTraining(trainingId)) {
+	public void addPupilToTraining(@AuthenticationPrincipal User activeUser, @PathVariable int id) throws NotFoundTrainingIdException, TrainingNotAvailableException {
+		if (!trainingController.existsTraining(id)) {
 			throw new NotFoundTrainingIdException();
 		}
-		if (!trainingController.addPupilToTraining(trainingId, activeUser.getUsername())) {
+		if (!trainingController.addPupilToTraining(id, activeUser.getUsername())) {
 			throw new TrainingNotAvailableException();
 		}
 	}

@@ -23,6 +23,10 @@ public class RestService {
 				.clazz(TokenWrapper.class).post().build();
 		return token.getToken();
 	}
+	
+	public void logOut(String username) {
+		
+	}
 
 	public String registerAndLoginPlayer() {
 		UserWrapper player = new UserWrapperBuilder().build();

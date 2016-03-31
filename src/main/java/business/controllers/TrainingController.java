@@ -1,5 +1,6 @@
 package business.controllers;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -91,13 +92,25 @@ public class TrainingController {
 	}
 
 	public List<TrainingWrapper> getAvailableTrainings() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Training> trainings = trainingDao.findAll();
+		List<TrainingWrapper> availableTrainings = new ArrayList<TrainingWrapper>();
+		
+		for (Training training: trainings) {
+			if (training.getStartDate().compareTo(Calendar.getInstance()) >= 0) {
+				availableTrainings.add(new TrainingWrapper(training));
+			}
+		}
+		return availableTrainings;
 	}
 
 	public boolean addPupilToTraining(int trainingId, String username) {
-		// TODO Auto-generated method stub
-		return false;
+		Training training = trainingDao.findOne(trainingId);
+		User pupil = userDao.findByUsernameOrEmail(username);
+		if (!training.addPupil(pupil)) {
+			return false;
+		}
+		trainingDao.save(training);
+		return true;
 	}
 
 }
