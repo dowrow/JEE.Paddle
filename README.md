@@ -24,14 +24,14 @@
 * Añadir un alumno a un entrenamiento
 * Eliminar un alumno de un entrenamiento
 
-### Tests de la capa de persitencia
+#### Tests de la capa de persitencia
 * Test para las entidades Token y Training
 * Test para los daos TokenDao y TrainingDao
 
-###  Caducidad de token en capa de negocio
+####  Caducidad de token en capa de negocio
 * Modificación de UserDetailsServiceImpl para eliminar tokens caducados
 
-### API Rest para gestionar clases de padel
+#### API Rest para gestionar clases de padel
 * Implementación del recurso TrainingResource con los endpoints:
  * [/api/v0/trainings],methods=[POST]
  * [/api/v0/trainings],methods=[GET]
@@ -41,11 +41,11 @@
  * [/api/v0/trainings/{id}/pupils/{pupil_id}],methods=[DELETE]
  * [/api/v0/users],methods=[POST]
 
-### Tests para la capa de negocio
+#### Tests para la capa de negocio
 * Test funcionales para la el recurso TrainingResource
 
 
-### Presentacion web con Thymeleaf
+#### Presentacion web con Thymeleaf
 * Implementación de vista para mostrar entrenamientos disponibles.
 * Implementación de vista para crear un nuevo entrenamiento
 
